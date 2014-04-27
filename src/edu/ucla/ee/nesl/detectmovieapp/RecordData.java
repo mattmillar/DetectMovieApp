@@ -243,7 +243,7 @@ public class RecordData extends Service {
 						+ "\n";
 				
 				dataStream.writeUTF(dataStr);
-				Log.d("dataStr", dataStr);
+				Log.d("sensor-data", dataStr);
 
 			}
 			dataStream.flush();

@@ -185,7 +185,7 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int camId = 0; camId < Camera.getNumberOfCameras(); camId++) {
             Camera.getCameraInfo(camId, cameraInfo);
-            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) { // CHANGED
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 try {
                     camera = Camera.open(camId);
                 } catch (RuntimeException e) {
