@@ -27,7 +27,7 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 
-public class RecordData extends Service {
+public class RecordDataBackup extends Service {
 	public static final String TAG = "RecordData";
 	public static boolean isServiceInitialized = false;
 	private SensorManager sManager;
@@ -46,10 +46,10 @@ public class RecordData extends Service {
 	public static final int NUM_SENSOR_VALUES = 5;
 	
 	volatile float[] lightSensorBuf = new float[NUM_SENSOR_VALUES];
-	volatile float[] gravSensorBuf  = new float[NUM_SENSOR_VALUES];
-	volatile float[] accelSensorBuf = new float[NUM_SENSOR_VALUES];
-	volatile float[] gyroSensorBuf  = new float[NUM_SENSOR_VALUES];
-	volatile float[] tempSensorBuf  = new float[NUM_SENSOR_VALUES];
+	//volatile float[] gravSensorBuf  = new float[NUM_SENSOR_VALUES];
+	//volatile float[] accelSensorBuf = new float[NUM_SENSOR_VALUES];
+	//volatile float[] gyroSensorBuf  = new float[NUM_SENSOR_VALUES];
+	//volatile float[] tempSensorBuf  = new float[NUM_SENSOR_VALUES];
 	
 	boolean getLightFromCamera = true;
 	
@@ -145,16 +145,16 @@ public class RecordData extends Service {
 		
 		SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		Sensor lightSensor = sensorManager.getSensorList(Sensor.TYPE_LIGHT).get(0);
-		Sensor gravSensor = sensorManager.getSensorList(Sensor.TYPE_GRAVITY).get(0);
-		Sensor accelSensor = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-		Sensor gyroSensor = sensorManager.getSensorList(Sensor.TYPE_GYROSCOPE).get(0);
-		Sensor tempSensor = sensorManager.getSensorList(Sensor.TYPE_GRAVITY).get(0);
+		//Sensor gravSensor = sensorManager.getSensorList(Sensor.TYPE_GRAVITY).get(0);
+		//Sensor accelSensor = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
+		//Sensor gyroSensor = sensorManager.getSensorList(Sensor.TYPE_GYROSCOPE).get(0);
+		//Sensor tempSensor = sensorManager.getSensorList(Sensor.TYPE_GRAVITY).get(0);
 		
-		sensorManager.registerListener(new SensorRecorder(lightSensorBuf), lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		sensorManager.registerListener(new SensorRecorder(gravSensorBuf), gravSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		sensorManager.registerListener(new SensorRecorder(accelSensorBuf), accelSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		sensorManager.registerListener(new SensorRecorder(gyroSensorBuf), gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		sensorManager.registerListener(new SensorRecorder(tempSensorBuf), tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//sensorManager.registerListener(new SensorRecorder(lightSensorBuf), lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//sensorManager.registerListener(new SensorRecorder(gravSensorBuf), gravSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//sensorManager.registerListener(new SensorRecorder(accelSensorBuf), accelSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//sensorManager.registerListener(new SensorRecorder(gyroSensorBuf), gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//sensorManager.registerListener(new SensorRecorder(tempSensorBuf), tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
 		
 		return 0;
@@ -220,29 +220,31 @@ public class RecordData extends Service {
 			int start = (currIndex + 2*numSamples - refreshPeriod) % (2*numSamples);
 			for(int i = start ; i < start + refreshPeriod; i++) {
 		
-				String dataStr = Double.toString(lightBuf[i % (2*numSamples)])
-						
+				String timeStr = Long.toString(System.currentTimeMillis());
+				String cameraStr = Double.toString(lightBuf[i % (2*numSamples)]);
+
+				String dataStr = timeStr + "," + cameraStr					
 						+ "," + Float.toString(lightSensorBuf[0])
-						+ "," + Float.toString(lightSensorBuf[1])
-						+ "," + Float.toString(lightSensorBuf[2])
+						//+ "," + Float.toString(lightSensorBuf[1])
+						//+ "," + Float.toString(lightSensorBuf[2])
 						
-						+ "," + Float.toString(gravSensorBuf[0])
-						+ "," + Float.toString(gravSensorBuf[1])
-						+ "," + Float.toString(gravSensorBuf[2])
+						//+ "," + Float.toString(gravSensorBuf[0])
+						//+ "," + Float.toString(gravSensorBuf[1])
+						//+ "," + Float.toString(gravSensorBuf[2])
 						
-						+ "," + Float.toString(accelSensorBuf[0])
-						+ "," + Float.toString(accelSensorBuf[1])
-						+ "," + Float.toString(accelSensorBuf[2])
+						//+ "," + Float.toString(accelSensorBuf[0])
+						//+ "," + Float.toString(accelSensorBuf[1])
+						//+ "," + Float.toString(accelSensorBuf[2])
 						
-						+ "," + Float.toString(gyroSensorBuf[0])
-						+ "," + Float.toString(gyroSensorBuf[1])
-						+ "," + Float.toString(gyroSensorBuf[2])
+						//+ "," + Float.toString(gyroSensorBuf[0])
+						//+ "," + Float.toString(gyroSensorBuf[1])
+						//+ "," + Float.toString(gyroSensorBuf[2])
 						
-						+ "," + Float.toString(tempSensorBuf[0])
+						//+ "," + Float.toString(tempSensorBuf[0])
 						
 						+ "\n";
 				
-				dataStream.writeUTF(dataStr);
+				//dataStream.writeUTF(dataStr);
 				Log.d("sensor-data", dataStr);
 
 			}
@@ -306,9 +308,9 @@ public class RecordData extends Service {
 				openFileForLogging();
 				writeData();
 			}
-			if(checkIfMovie(lightCoeffs)) { 
-				soundPool.play(sound, 1.0f, 1.0f, 0, 0, 1.0f);
-			}
+			//if(checkIfMovie(lightCoeffs)) { 
+			//	soundPool.play(sound, 1.0f, 1.0f, 0, 0, 1.0f);
+			//}
 		}
 			 
 		updateFeatures(String.format(str,isMoving));

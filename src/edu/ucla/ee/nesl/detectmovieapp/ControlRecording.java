@@ -100,6 +100,7 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
     	Camera.Parameters parameters = camera.getParameters();
         parameters.setAutoExposureLock(true);
         parameters.setAutoWhiteBalanceLock(true);
+		//parameters.setSceneMode(Camera.Parameters.SCENE_MODE_SPORTS);
         Log.d(TAG, "Exposure locked");
         camera.setParameters(parameters);
 		badExposure = 0;
@@ -185,7 +186,7 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int camId = 0; camId < Camera.getNumberOfCameras(); camId++) {
             Camera.getCameraInfo(camId, cameraInfo);
-            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 try {
                     camera = Camera.open(camId);
                 } catch (RuntimeException e) {
